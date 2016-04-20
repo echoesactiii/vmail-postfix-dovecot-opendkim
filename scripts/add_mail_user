@@ -9,13 +9,12 @@ fi
 DOMAINPART=$(echo $1 | sed -e "s/^.*\@//")
 USERPART=$(echo $1 | sed -e "s/\@.*$//")
 
-PASSHASH=$(doveadm pw -s SHA512-CRYPT)
-
-grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null
-if grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null; then
+if ! grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null; then
 	echo This server is not responsible for the domain of this user.
 	exit 1
 fi
+
+PASSHASH=$(doveadm pw -s SHA512-CRYPT)
 
 add_mail_alias $1 $1
 echo -e "$1\t\t$DOMAINPART/$USERPART/" >>/etc/vmail/mailboxes
