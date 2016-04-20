@@ -11,12 +11,16 @@ USERPART=$(echo $1 | sed -e "s/\@.*$//")
 
 PASSHASH=$(doveadm pw -s SHA512-CRYPT)
 
-grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null || (echo This server is not responsible for the domain of this user.; exit 1)
+grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null
+if grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null; then
+	echo This server is not responsible for the domain of this user.
+	exit 1
+fi
 
 add_mail_alias $1 $1
-echo -e "$0\t\t$DOMAINPART/$USERPART/" >>/etc/vmail/mailboxes
+echo -e "$1\t\t$DOMAINPART/$USERPART/" >>/etc/vmail/mailboxes
 postmap /etc/vmail/mailboxes
-echo -e "$0:$PASSHASH" >>/etc/vmail/passwd
+echo -e "$1:$PASSHASH" >>/etc/vmail/passwd
 postfix reload
 dovecot reload
 
