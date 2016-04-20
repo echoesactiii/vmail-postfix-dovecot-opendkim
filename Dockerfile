@@ -12,19 +12,21 @@ RUN \
   easy_install supervisor
 
 # Install packages
-RUN rpm -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools 
+RUN yum -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools 
 
 # Make some folders & users & stuff
-useradd vmail -d /var/vmail -M -r -s /usr/sbin/nologin -U
-mkdir -m 0755 /etc/ssl/mailcerts
-mkdir -m 0755 /etc/vmail
-mkdir -m 0751 /var/vmail
+RUN useradd vmail -d /var/vmail -M -r -s /usr/sbin/nologin -U && \
+mkdir -m 0755 /etc/ssl/mailcerts && \
+mkdir -m 0755 /etc/vmail && \
+mkdir -m 0751 /var/vmail && \
 chown vmail:vmail /var/vmail
 
 # Postfix config
 RUN rm /etc/postfix/main.cf /etc/postfix/master.cf
 ADD conf/main.cf /etc/postfix/main.cf
 ADD conf/master.cf /etc/postfix/master.cf
+RUN touch /etc/vmail/aliases /etc/vmail/domains /etc/vmail/mailboxes /etc/vmail/passwd
+RUN postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/maiboxes
 
 # Dovecot config
 RUN rm /etc/dovecot/dovecot.conf /etc/dovecot/conf.d/*
@@ -51,12 +53,14 @@ VOLUME ["/var/vmail"]
 VOLUME ["/etc/vmail"]
 VOLUME ["/etc/ssl/mailcerts"]
 
-# add test PHP file
-ADD src/index.php /usr/share/nginx/html/index.php
-RUN chown -Rf nginx.nginx /usr/share/nginx/html/
-
 # Expose Ports
-EXPOSE 443
-EXPOSE 80
+EXPOSE 465
+EXPOSE 25
+EXPOSE 587
+EXPOSE 993
+EXPOSE 143
+EXPOSE 110
+EXPOSE 995
+EXPOSE 4190
 
 CMD ["/bin/bash", "/start.sh"]
