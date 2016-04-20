@@ -26,5 +26,8 @@ openssl x509 -req -days 365 -in /etc/ssl/mailcerts/mail.csr -signkey /etc/ssl/ma
 # Again set the right permissions (needed when mounting from a volume)
 chown -Rf vmail:vmail /var/vmail/
 
+# Postmap intitial config files for postfix so it doesn't whine.
+postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/maiboxes
+
 # Start supervisord and services
 /usr/bin/supervisord -n -c /etc/supervisord.conf

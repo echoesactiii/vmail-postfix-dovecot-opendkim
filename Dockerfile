@@ -26,7 +26,6 @@ RUN rm /etc/postfix/main.cf /etc/postfix/master.cf
 ADD conf/main.cf /etc/postfix/main.cf
 ADD conf/master.cf /etc/postfix/master.cf
 RUN touch /etc/vmail/aliases /etc/vmail/domains /etc/vmail/mailboxes /etc/vmail/passwd
-RUN postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/maiboxes
 
 # Dovecot config
 RUN rm /etc/dovecot/dovecot.conf /etc/dovecot/conf.d/*
