@@ -1,0 +1,78 @@
+## STANDARD POSTFIX CONFIG PARAMS ###
+
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+myhostname = %MAIL_HOSTNAME%
+mydomain = %MAIL_HOSTNAME_FQDN%
+myorigin = $myhostname
+inet_interfaces = all
+inet_protocols = all
+mydestination = $myhostname, localhost.$mydomain, localhost
+unknown_local_recipient_reject_code = 550
+mynetworks = 127.0.0.0/8, [::1]/128
+alias_maps = hash:/etc/postfix/aliases
+alias_database = $alias_maps
+
+mailbox_command = /usr/libexec/dovecot/deliver
+  
+debug_peer_level = 2
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.10.1/samples
+readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
+
+smtp_tls_security_level = may
+smtp_tls_loglevel = 1
+smtp_tls_protocols = !SSLv2
+smtp_tls_exclude_ciphers = EXPORT, LOW
+
+### VIRTUAL MAIL CONFIG PARAMS ###
+relay_domains = *
+virtual_alias_maps = hash:/etc/vmail/aliases
+virtual_mailbox_domains = hash:/etc/vmail/domains
+virtual_mailbox_maps = hash:/etc/vmail/mailboxes
+
+virtual_mailbox_base = /var/vmail
+virtual_minimum_uid = 2222
+virtual_transport = dovecot
+virtual_uid_maps = static:2222
+virtual_gid_maps = static:2222
+
+dovecot_destination_recipient_limit = 1
+
+milter_protocol = 2
+milter_default_action = accept
+smtpd_milters = inet:localhost:8891
+non_smtpd_milters = inet:localhost:8891
+
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = /var/run/dovecot/auth-client
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_tls_security_options = $smtpd_sasl_security_options
+smtpd_sasl_local_domain = $mydomain
+broken_sasl_auth_clients = yes
+
+smtpd_tls_security_level = may
+smtpd_tls_key_file = /etc/ssl/mailcerts/mail.key
+smtpd_tls_cert_file = /etc/ssl/mailcerts/mail_chained.crt
+smtpd_tls_loglevel = 1
+smtpd_tls_session_cache_timeout = 3600s
+smtpd_tls_session_cache_database = btree:/var/lib/postfix/smtpd_tls_cache
+smtpd_tls_protocols = $smtp_tls_protocols
+tls_random_source = dev:/dev/urandom
+tls_random_exchange_name = /var/lib/postfix/prng_exch
+smtpd_tls_auth_only = yes
+
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
