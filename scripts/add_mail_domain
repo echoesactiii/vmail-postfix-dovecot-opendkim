@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo Please specify a domain to add.
+	echo Example: add_mail_domain example.com
+	exit 1
+fi
+
+echo -e "$0\tOK" >>/etc/vmail/domains
+postmap /etc/vmail/domains
+postfix reload
+
+echo Domain added.
