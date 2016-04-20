@@ -66,6 +66,5 @@ EXPOSE 993
 EXPOSE 143
 EXPOSE 110
 EXPOSE 995
-EXPOSE 4190
 
 CMD ["/bin/bash", "/start.sh"]
