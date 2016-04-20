@@ -20,7 +20,7 @@ openssl genrsa -des3 -passout pass:x -out /etc/ssl/mailcerts/mail.pass.key 2048 
 openssl rsa -passin pass:x -in /etc/ssl/mailcerts/mail.pass.key -out /etc/ssl/mailcerts/mail.key
 rm /etc/ssl/mailcerts/mail.pass.key
 openssl req -new -key /etc/ssl/mailcerts/mail.key -out /etc/ssl/mailcerts/mail.csr \
-  -subj "/C=UK/ST=England/L=London/O=OrgName/OU=IT Department/CN=$HOSTNAME_FQDN"
+  -subj "/C=UK/ST=England/L=London/O=OrgName/OU=IT Department/CN=$MAIL_HOSTNAME_FQDN"
 openssl x509 -req -days 365 -in /etc/ssl/mailcerts/mail.csr -signkey /etc/ssl/mailcerts/mail.key -out /etc/ssl/mailcerts/mail_chained.crt
 
 # Again set the right permissions (needed when mounting from a volume)
