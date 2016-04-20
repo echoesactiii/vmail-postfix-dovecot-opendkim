@@ -14,7 +14,11 @@ fi
 
 DOMAINPART=$(echo $1 | sed -e "s/^.*\@//")
 
-grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null || (echo This server is not responsible for the domain of this alias.; exit 1)
+grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null
+if grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null; then
+	echo This server is not responsible for the domain of this alias.
+	exit 1
+fi
 
 echo -e "$1\t\t$2" >>/etc/vmail/aliases
 postmap /etc/vmail/aliases
