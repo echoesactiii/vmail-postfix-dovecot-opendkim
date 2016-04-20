@@ -6,8 +6,10 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-echo -e "$0\tOK" >>/etc/vmail/domains
+echo -e "$1\tOK" >>/etc/vmail/domains
 postmap /etc/vmail/domains
+mkdir /var/vmail/$1
+chown vmail:vmail /var/vmail/$1
 postfix reload
 
 echo Domain added.

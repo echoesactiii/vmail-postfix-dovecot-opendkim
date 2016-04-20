@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo Please specify a user to add.
+	echo Example: add_mail_user martha@example.com
+	exit 1
+fi
+
+DOMAINPART=$(echo $1 | sed -e "s/^.*\@//")
+USERPART=$(echo $1 | sed -e "s/\@.*$//")
+
+PASSHASH=$(doveadm pw -s SHA512-CRYPT)
+
+grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null || (echo This server is not responsible for the domain of this user.; exit 1)
+
+add_mail_alias $1 $1
+echo -e "$0\t\t$DOMAINPART/$USERPART/" >>/etc/vmail/mailboxes
+postmap /etc/vmail/mailboxes
+echo -e "$0:$PASSHASH" >>/etc/vmail/passwd
+postfix reload
+dovecot reload
+
+PASSHASH=""
+
+echo User added.

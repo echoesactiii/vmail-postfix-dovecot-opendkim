@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo Please specify an alias to add.
+	echo Example: add_mail_alias martha@example.com martha@example2.co.uk
+	exit 1
+fi
+
+if [ -z "$2" ]; then
+	echo Please specify a target for the alias.
+	echo Example: add_mail_alias martha@example.com martha@example2.co.uk
+	exit 1
+fi
+
+DOMAINPART=$(echo $1 | sed -e "s/^.*\@//")
+
+grep "^$DOMAINPART\s" /etc/vmail/domains &>/dev/null || (echo This server is not responsible for the domain of this alias.; exit 1)
+
+echo -e "$1\t\t$2" >>/etc/vmail/aliases
+postmap /etc/vmail/aliases
+postfix reload
+
+echo Alias added.

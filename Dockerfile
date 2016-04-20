@@ -40,6 +40,12 @@ ADD conf/opendkim.conf /etc/opendkim.conf
 ADD conf/TrustedHosts /etc/opendkim/TrustedHosts
 RUN opendkim-default-keygen
 
+# Copy in scripts & make them executable
+ADD scripts/add_mail_user /usr/bin/add_mail_user
+ADD scripts/add_mail_domain /usr/bin/add_mail_domain
+ADD scripts/add_mail_alias /usr/bin/add_mail_alias
+RUN chmod +x /usr/bin/add_mail_user /usr/bin/add_mail_domain /usr/bin/add_mail_alias
+
 # Supervisor Config
 ADD conf/supervisord.conf /etc/supervisord.conf
 
