@@ -27,7 +27,8 @@ openssl x509 -req -days 365 -in /etc/ssl/mailcerts/mail.csr -signkey /etc/ssl/ma
 chown -Rf vmail:vmail /var/vmail/
 
 # Postmap intitial config files for postfix so it doesn't whine.
-postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/maiboxes
+touch /etc/vmail/aliases /etc/vmail/domains /etc/vmail/mailboxes /etc/vmail/passwd
+postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/mailboxes
 
 # Start supervisord and services
 /usr/bin/supervisord -n -c /etc/supervisord.conf
