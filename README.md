@@ -43,7 +43,7 @@ Syntax: `-v /host/path:/container/path`
 
 You can use Docker to link a path within the container to a path on the host. For example, to expose the mail storage on the Docker host at `/opt/mail`, you could use:
 
-	docker run --name <container_name> -p 8080:80 -d -h <container_hostname> -v /opt/mail:/var/vmail katastrophe/vmail-postfix-dovecot-opendkim
+	docker run --name <container_name> -d -h <container_hostname> -v /opt/mail:/var/vmail katastrophe/vmail-postfix-dovecot-opendkim
 
 Useful volumes to link:
 - `/var/vmail`: All mailboxes are stored here under `<domain>/<username>`.
