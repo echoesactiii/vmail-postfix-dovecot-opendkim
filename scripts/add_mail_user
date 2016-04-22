@@ -20,6 +20,8 @@ add_mail_alias $1 $1
 echo -e "$1\t\t$DOMAINPART/$USERPART/" >>/etc/vmail/mailboxes
 postmap /etc/vmail/mailboxes
 echo -e "$1:$PASSHASH" >>/etc/vmail/passwd
+mkdir /var/vmail/$DOMAINPART/$USERPART
+chown vmail:vmail /var/vmail/$DOMAINPART/$USERPART
 postfix reload
 dovecot reload
 
