@@ -15,7 +15,8 @@ RUN \
 RUN yum -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools 
 
 # Make some folders & users & stuff
-RUN useradd vmail -d /var/vmail -M -r -s /usr/sbin/nologin -U && \
+RUN groupadd vmail -g 2222
+RUN useradd vmail -d /var/vmail -M -s /usr/sbin/nologin -g 2222 -u 2222 && \
 mkdir -m 0755 /etc/ssl/mailcerts && \
 mkdir -m 0755 /etc/vmail && \
 mkdir -m 0751 /var/vmail && \
