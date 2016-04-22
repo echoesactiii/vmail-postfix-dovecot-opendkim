@@ -37,7 +37,6 @@ ADD conf/90-sieve.conf /etc/dovecot/conf.d/90-sieve.conf
 # OpenDKIM config
 ADD conf/opendkim.conf /etc/opendkim.conf
 ADD conf/TrustedHosts /etc/opendkim/TrustedHosts
-RUN opendkim-default-keygen
 
 # Copy in scripts & make them executable
 ADD scripts/add_mail_user /usr/bin/add_mail_user

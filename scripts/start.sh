@@ -25,6 +25,10 @@ if [ ! -e /etc/ssl/mailcerts/mail_chained.crt ]; then
 	openssl x509 -req -days 365 -in /etc/ssl/mailcerts/mail.csr -signkey /etc/ssl/mailcerts/mail.key -out /etc/ssl/mailcerts/mail_chained.crt
 fi
 
+if [ ! -e /etc/opendkim/keys/default.private ]; then
+	opendkim-default-keygen
+fi
+
 # Again set the right permissions (needed when mounting from a volume)
 chown -Rf vmail:vmail /var/vmail/
 
