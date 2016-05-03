@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup git variables
+# Set default env vars
 if [ -z "$MAIL_HOSTNAME" ]; then
  MAIL_HOSTNAME="mail"
 fi
@@ -16,17 +16,19 @@ sed -i -e "s/%MAIL_HOSTNAME_FQDN%/$MAIL_HOSTNAME_FQDN/g" /etc/postfix/main.cf
 sed -i -e "s/%MAIL_HOSTNAME_FQDN%/$MAIL_HOSTNAME_FQDN/g" /etc/opendkim/TrustedHosts
 sed -i -e "s/%POSTMASTER_ADDRESS%/$POSTMASTER_ADDRESS/g" /etc/dovecot/dovecot.conf
 
-if [ ! -e /etc/ssl/mailcerts/mail_chained.crt ]; then
+if [ ! -e /etc/ssl/mailcerts/.ssl-generated ]; then
 	openssl genrsa -des3 -passout pass:x -out /etc/ssl/mailcerts/mail.pass.key 2048 && \
 	openssl rsa -passin pass:x -in /etc/ssl/mailcerts/mail.pass.key -out /etc/ssl/mailcerts/mail.key
 	rm /etc/ssl/mailcerts/mail.pass.key
 	openssl req -new -key /etc/ssl/mailcerts/mail.key -out /etc/ssl/mailcerts/mail.csr \
 	  -subj "/C=UK/ST=England/L=London/O=OrgName/OU=IT Department/CN=$MAIL_HOSTNAME_FQDN"
 	openssl x509 -req -days 365 -in /etc/ssl/mailcerts/mail.csr -signkey /etc/ssl/mailcerts/mail.key -out /etc/ssl/mailcerts/mail_chained.crt
+	echo "Do not remove this file." > /etc/ssl/mailcerts/.ssl-generated
 fi
 
-if [ ! -e /etc/opendkim/keys/default.private ]; then
+if [ ! -e /etc/opendkim/keys/.default-generated ]; then
 	opendkim-default-keygen
+	echo "Do not remove this file." > /etc/opendkim/keys/.default-generated
 fi
 
 # Again set the right permissions (needed when mounting from a volume)
@@ -36,5 +38,3 @@ chown -Rf vmail:vmail /var/vmail/
 touch /etc/vmail/aliases /etc/vmail/domains /etc/vmail/mailboxes /etc/vmail/passwd
 postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/mailboxes
 
-# Start supervisord and services
-/usr/bin/supervisord -n -c /etc/supervisord.conf

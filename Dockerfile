@@ -3,13 +3,12 @@ MAINTAINER Kat Andry (kat@mxandry.net)
 
 ENV container docker
 
-# Install supervisord
+# Install initial requirements
 RUN \
   yum update -y && \
   yum install -y epel-release && \
   yum install -y iproute python-setuptools hostname inotify-tools yum-utils which && \
-  yum clean all && \
-  easy_install supervisor
+  yum clean all
 
 # Install packages
 RUN yum -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools 
