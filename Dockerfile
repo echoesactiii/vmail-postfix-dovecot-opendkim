@@ -11,7 +11,7 @@ RUN \
   yum clean all
 
 # Install packages
-RUN yum -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools 
+RUN yum -y install openssl postfix dovecot dovecot-pigeonhole opendkim opendkim-tools rsyslog
 
 # Make some folders & users & stuff
 RUN groupadd vmail -g 2222
