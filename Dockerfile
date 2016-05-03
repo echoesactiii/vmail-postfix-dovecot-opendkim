@@ -44,10 +44,7 @@ ADD scripts/add_mail_domain /usr/bin/add_mail_domain
 ADD scripts/add_mail_alias /usr/bin/add_mail_alias
 RUN chmod +x /usr/bin/add_mail_user /usr/bin/add_mail_domain /usr/bin/add_mail_alias
 
-# Supervisor Config
-ADD conf/supervisord.conf /etc/supervisord.conf
-
-# Start Supervisord
+# Run our start script
 ADD scripts/start.sh /start.sh
 RUN chmod 755 /start.sh
 

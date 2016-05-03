@@ -38,3 +38,7 @@ chown -Rf vmail:vmail /var/vmail/
 touch /etc/vmail/aliases /etc/vmail/domains /etc/vmail/mailboxes /etc/vmail/passwd
 postmap /etc/vmail/aliases && postmap /etc/vmail/domains && postmap /etc/vmail/mailboxes
 
+# Start our services
+/sbin/opendkim -x /etc/opendkim.conf
+/sbin/dovecot -c /etc/dovecot/dovecot.conf
+/sbin/postfix -c /etc/postfix start
