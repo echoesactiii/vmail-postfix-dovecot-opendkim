@@ -38,6 +38,10 @@ ADD conf/90-sieve.conf /etc/dovecot/conf.d/90-sieve.conf
 ADD conf/opendkim.conf /etc/opendkim.conf
 ADD conf/TrustedHosts /etc/opendkim/TrustedHosts
 
+# rsyslog config
+RUN rm /etc/rsyslog.conf /etc/rsyslog.d/*
+ADD conf/rsyslog.conf /etc/rsyslog.conf
+
 # Copy in scripts & make them executable
 ADD scripts/add_mail_user /usr/bin/add_mail_user
 ADD scripts/add_mail_domain /usr/bin/add_mail_domain
