@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat /etc/opendkim/keys/default.txt | tr --delete '\n' | sed 's/\"\s*\"//ig' | sed 's/; -.*$//ig'

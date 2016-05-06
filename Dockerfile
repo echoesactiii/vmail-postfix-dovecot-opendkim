@@ -46,7 +46,9 @@ ADD conf/rsyslog.conf /etc/rsyslog.conf
 ADD scripts/add_mail_user /usr/bin/add_mail_user
 ADD scripts/add_mail_domain /usr/bin/add_mail_domain
 ADD scripts/add_mail_alias /usr/bin/add_mail_alias
-RUN chmod +x /usr/bin/add_mail_user /usr/bin/add_mail_domain /usr/bin/add_mail_alias
+ADD scripts/get_dkim_record /usr/bin/get_dkim_record
+ADD scripts/change_mail_password /usr/bin/change_mail_password
+RUN chmod +x /usr/bin/add_mail_user /usr/bin/add_mail_domain /usr/bin/add_mail_alias /usr/bin/get_dkim_record /usr/bin/change_mail_password
 
 # Run our start script
 ADD scripts/start.sh /start.sh

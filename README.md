@@ -1,5 +1,5 @@
 ## Introduction
-This Dockerfile will build a container image with Postfix, Dovecot and OpenDKIM for virtual mailhosting. Dovecot also has support for sieve/managesieve built into this build. The image is based on CentOS 7.
+This Dockerfile will build a container image with Postfix, Dovecot and OpenDKIM for virtual mailhosting. Dovecot also has support for sieve/managesieve built into this build. The image is based on CentOS 7. It also includes rsyslog for logging.
 
 ## Repositories
 
@@ -57,6 +57,8 @@ Three scripts are available for adding users, domains and aliases:
 - `/usr/bin/add_mail_domain <domain>`: Add a domain that the server will accept mail for. This will also create the necessary folder structure in `/var/vmail`.
 - `/usr/bin/add_mail_user <email address>`: Add a user that the server will accept mail for. This will prompt for a password to be used for the new user.
 - `/usr/bin/add_mail_alias <alias email address> <target email address>`: This will add a mail alias of `<alias email address>` for the `<target email address>`.
+- `/usr/bin/change_mail_password <email address>`: Change an existing user's password. This will prompt for a new password.
+- `/usr/bin/get_dkim_record`: This will return a DNS record for the generated DKIM keys for use in your zonefile or DNS provider.
 
 These scripts will make all necessary changes and reload all necessary services. They can be run from the docker host with, using `add_mail_domain` as an example:
 
