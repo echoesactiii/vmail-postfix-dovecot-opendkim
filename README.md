@@ -25,7 +25,7 @@ You can build this container from source with:
 ### Running
 Run the container with minimal configuration and options:
 
-	docker run --name <container_name> -p 25:25 -p 465:465 -p 587:587 -p 110:110 -p 995:995 -p 143:143 -p 993:993 -d -h <container_hostname> katastrophe/vmail-postfix-dovecot-opendkim -e "MAIL_HOSTNAME=<short_hostname>" -e "MAIL_HOSTNAME_FQDN=<fqdn_hostname>" -e "POSTMASTER_ADDRESS=<postmaster_email_address>"
+	docker run --name <container_name> -p 25:25 -p 465:465 -p 587:587 -p 110:110 -p 995:995 -p 143:143 -p 993:993 -d -h <container_hostname> -e "MAIL_HOSTNAME=<short_hostname>" -e "MAIL_HOSTNAME_FQDN=<fqdn_hostname>" -e "POSTMASTER_ADDRESS=<postmaster_email_address>" -it katastrophe/vmail-postfix-dovecot-opendkim /start.sh
 
 This will run the container. You can then use the scripts `add_mail_domain`, `add_mail_user` and `add_mail_alias` scripts to setup the mail server. Self-signed SSL certs will be generated, but you can replace these - these live at /etc/ssl/mailcerts.
 
@@ -43,7 +43,7 @@ Syntax: `-v /host/path:/container/path`
 
 You can use Docker to link a path within the container to a path on the host. For example, to expose the mail storage on the Docker host at `/opt/mail`, you could use:
 
-	docker run --name <container_name> -d -h <container_hostname> -v /opt/mail:/var/vmail katastrophe/vmail-postfix-dovecot-opendkim
+	docker run --name <container_name> -d -h <container_hostname> -v /opt/mail:/var/vmail [...] -it katastrophe/vmail-postfix-dovecot-opendkim /start.sh
 
 Useful volumes to link:
 - `/var/vmail`: All mailboxes are stored here under `<domain>/<username>`.
